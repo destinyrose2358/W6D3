@@ -1,3 +1,5 @@
+require_relative "null_piece.rb"
+
 module Slideable
 
     DIRECTIONS = { diagonal: [[1, -1], [-1, 1]],
@@ -23,7 +25,7 @@ module Slideable
                             valid_moves << test_pos
                             break
                         elsif outcome
-                            valid_move << test_pos
+                            valid_moves << test_pos
                         else
                             break
                         end
@@ -36,7 +38,7 @@ module Slideable
     end
 
     def valid_move?(pos)
-        return true if board[pos].is_a?(Null_Piece)
+        return true if board[pos].is_a?(NullPiece)
         if board[pos].color == self.color
             return false
         else

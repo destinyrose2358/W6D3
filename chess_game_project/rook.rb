@@ -2,15 +2,16 @@ require_relative "piece.rb"
 require_relative "slideable.rb"
 
 
-class Queen < Piece 
+class Rook < Piece 
     include Slideable
 
     def initialize (position, board, color)
-        super(position, board, color,:Q)
+        super(position, board, color,:R)
+        
     end
 
     def move_dir
-        [:diagonal, :horizontal, :vertical]
+        [:horizontal, :vertical]
     end
 
 

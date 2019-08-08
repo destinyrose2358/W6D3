@@ -6,7 +6,7 @@ class Display
     attr_reader :board, :cursor
 
     def initialize
-        @board = Board.new
+        @board = Board.filled_board
         @cursor = Cursor.new([0,0],board)
     end
 

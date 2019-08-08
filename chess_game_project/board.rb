@@ -10,9 +10,14 @@ require_relative "pawn.rb"
 class Board
     attr_reader :rows
 
+    def self.filled_board
+        board = Board.new
+        board.fill_board
+        board
+    end
+
     def initialize
         @rows = Array.new(8) { Array.new(8, NullPiece.instance) }
-        fill_board
     end
 
     def [](pos)
@@ -20,7 +25,7 @@ class Board
         rows[row][col]
     end
 
-    def move_piece(start_pos,end_pos)
+    def move_piece!(start_pos,end_pos)
         piece = self[start_pos]
 
         raise "Empty start position" if piece.is_a?(NullPiece)
@@ -34,22 +39,49 @@ class Board
         self[start_pos] = NullPiece.instance
     end
 
-    def in_check?(color)
-        king = rows.flatten.find do |piece|
-            piece.is_a?(King) && piece.color == color
-        end
+    def move_piece(start_pos,end_pos)
+        piece = self[start_pos]
 
-        opponents = rows.flatten.select { |piece| piece.color != color && !piece.color.nil?}
+        raise "Empty start position" if piece.is_a?(NullPiece)
+
+        raise "End position off board" unless end_pos[0].between?(0,7) && end_pos[1].between?(0,7)
+
+        raise "Illegal move" unless piece.legal_moves.include?(end_pos)
+
+        self[end_pos] = piece
+        piece.position = end_pos
+        self[start_pos] = NullPiece.instance
+    end
+
+    def in_check?(color)
+        king = find_king(color)
+
+        opponents = all_pieces.select { |piece| piece.color != color}
         opponents.any? { |piece| piece.moves.include?(king.position) }
     end
 
-    
+    def find_king(color)
+        all_pieces.find do |piece|
+            piece.is_a?(King) && piece.color == color
+        end
+    end
 
-    private
+    def checkmate?(color)
+       ours = all_pieces.select { |piece| piece.color == color}
+       ours.all? {|piece| piece.legal_moves.empty? }
+    end
 
-    def []=(pos, value)
-        row, col = pos
-        rows[row][col] = value
+    def dup
+        new_board = Board.new
+        pieces = all_pieces
+        pieces.each do |piece|
+            new_board[piece.position] = piece.dup
+        end
+        new_board
+    end
+
+    def all_pieces
+        rows.flatten.select { |piece| !piece.is_a?(NullPiece)}
     end
 
     def fill_board
@@ -82,6 +114,13 @@ class Board
 
         #place_kings
         rows[0][4], rows[7][4] = King.new([0, 4], self, "white"), King.new([7, 4], self, "black")
+    end
+
+    protected
+
+    def []=(pos, value)
+        row, col = pos
+        rows[row][col] = value
     end
 
 

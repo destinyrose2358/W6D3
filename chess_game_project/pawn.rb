@@ -19,7 +19,7 @@ class Pawn < Piece
         if position == initial_pos 
             move_row = position[0] + move_dir * 2
             move_col = position[1]
-            move_options << [move_row,move_col]
+            move_options << [move_row,move_col] if board[[move_row,move_col]].is_a?(NullPiece)
         end
         move_row = position[0] + move_dir
         move_col = position[1]

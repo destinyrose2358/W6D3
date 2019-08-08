@@ -13,7 +13,7 @@ module Stepable
         end
 
         steps.select do |step|
-            valid_move?(step) && ( step[0].between?(0,7) && step[1].between?(0,7) )
+            ( step[0].between?(0,7) && step[1].between?(0,7) ) && valid_move?(step)
         end
         
     end
@@ -23,7 +23,7 @@ module Stepable
         if board[pos].color == self.color
             return false
         else
-            return nil
+            return true
         end
     end
 

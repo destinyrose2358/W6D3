@@ -34,6 +34,15 @@ class Board
         self[start_pos] = NullPiece.instance
     end
 
+    def in_check?(color)
+        king = rows.flatten.find do |piece|
+            piece.is_a?(King) && piece.color == color
+        end
+
+        opponents = rows.flatten.select { |piece| piece.color != color && !piece.color.nil?}
+        opponents.any? { |piece| piece.moves.include?(king.position) }
+    end
+
     
 
     private

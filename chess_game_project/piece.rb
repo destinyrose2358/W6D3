@@ -10,5 +10,9 @@ class Piece
         @symbol = symbol
     end
 
+    def inspect 
+        return self.color, self.symbol
+    end
+
 
 end

@@ -34,19 +34,19 @@ end
 
 class Coffee_Error < StandardError
   def message
-    print "coffee"
+    "coffee"
   end
 end
 
 class Best_Friend_Poser_Error < StandardError
   def message
-    puts "Wow, what a poser. You couldn't possibly be best friends."
+    "Wow, what a poser. You couldn't possibly be best friends."
   end
 end
 
 class Empty_String_Error < StandardError
   def message
-    puts "Empty string!"
+    "Empty string!"
   end
 
 end

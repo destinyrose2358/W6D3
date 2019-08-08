@@ -1,11 +1,13 @@
 require_relative "piece.rb"
+require_relative "null_piece.rb"
+require_relative "queen.rb"
 
 class Board
     attr_reader :rows
 
     def initialize
-        @rows = Array.new(8) { Array.new(8) }
-        fill_board
+        @rows = Array.new(8) { Array.new(8, NullPiece.instance) }
+        #fill_board
     end
 
     def [](pos)
@@ -20,17 +22,21 @@ class Board
 
         raise "End position off board" unless end_pos[0].between?(0,7) && end_pos[1].between?(0,7)
 
+        raise "Illegal move" unless piece.moves.include?(end_pos)
+
         self[end_pos] = piece
-        self[start_pos] = nil
+        piece.position = end_pos
+        self[start_pos] = NullPiece.instance
     end
 
-
-    private
-
-    def []=(pos, value)
+    def []=(pos, value) # put this back in private!!!
         row, col = pos
         rows[row][col] = value
     end
+
+    private
+
+    
 
     def fill_board
         # places pawns
